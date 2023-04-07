@@ -7,23 +7,28 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+
 import com.geektech.lovecalculator.databinding.FragmentCalculatorBinding
 import com.geektech.lovecalculator.remote.LoveModel
 import com.geektech.lovecalculator.remote.LoveService
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+@AndroidEntryPoint
 
 class CalculatorFragment : Fragment() {
 
 
     private lateinit var binding: FragmentCalculatorBinding
-    val viewModel: LoveViewModel by viewModels()
+
+    private val viewModel: LoveViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,42 +40,25 @@ class CalculatorFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initListener()
-    }
 
-    @SuppressLint("FragmentLiveDataObserve")
-    private fun initListener() {
+
         with(binding) {
             btnCalculate.setOnClickListener {
-                viewModel.qetLiveLoveModel(
+                viewModel.getLiveLoveModel(
                     etFirstName.text.toString(),
                     etSecondName.text.toString()
-                ).observe(this@CalculatorFragment,
-                    Observer {
-                        Log.e("ololo", "initClickers: $it")
-                    })
-//              //  LoveService().api.getPercentage(
-//                    etFirstName.text.toString(),
-//                    etSecondName.text.toString()
-//                ).enqueue(object : Callback<LoveModel> {
-//                    override fun onResponse(call: Call<LoveModel>, response: Response<LoveModel>) {
-//                        if (response.isSuccessful) {
-//                            Log.e("ololo", "onResponse: ${response.body()}")
-//                findNavController().navigate(
-//                    R.id.resultFragment
-
-
+                ).observe(viewLifecycleOwner) {
+                        val bundle = Bundle()
+                        bundle.putSerializable("RESULT", it)
+                        findNavController().navigate(R.id.resultFragment, bundle)
+                    }
+                }
             }
 
-//                            etFirstName.text.clear()
-//                            etSecondName.text.clear()
-//                        }
-//                    }
-//
-//                    override fun onFailure(call: Call<LoveModel>, t: Throwable) {
-//                        Log.e("ololo", "onResponse: ${t.message}")
-//                    }
-
-        }
     }
-}
+
+    companion object{
+        const val PREF_SEEN = "PREF_SEEN"
+
+        }}
+
