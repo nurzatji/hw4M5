@@ -76,4 +76,18 @@
         android:textSize="24sp"
         app:cornerRadius="20dp" />
 
+    <com.google.android.material.button.MaterialButton
+        app:cornerRadius="50dp"
+        android:id="@+id/btn_history"
+        android:textAllCaps="false"
+        android:textStyle="italic"
+        android:textColor="@color/black"
+       android:text="History"
+        android:backgroundTint="@color/purple_200"
+        android:layout_margin="25dp"
+        android:layout_gravity="left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="InvalidId" />
+
 </LinearLayout>

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -27,8 +28,9 @@ class CalculatorFragment : Fragment() {
 
 
     private lateinit var binding: FragmentCalculatorBinding
-
     private val viewModel: LoveViewModel by viewModels()
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,25 +42,30 @@ class CalculatorFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initClickers()
 
+    }
+
+    private fun initClickers() {
 
         with(binding) {
+            btnHistory.setOnClickListener {
+                findNavController().navigate(
+                    R.id.historyFragment
+                )
+            }
             btnCalculate.setOnClickListener {
                 viewModel.getLiveLoveModel(
                     etFirstName.text.toString(),
                     etSecondName.text.toString()
-                ).observe(viewLifecycleOwner) {
-                        val bundle = Bundle()
-                        bundle.putSerializable("RESULT", it)
-                        findNavController().navigate(R.id.resultFragment, bundle)
-                    }
-                }
+                ).observe(viewLifecycleOwner, Observer {
+                    App.appDatabase.loveDao().insertLove(it)
+
+                })
             }
-
+        }
     }
+}
 
-    companion object{
-        const val PREF_SEEN = "PREF_SEEN"
 
-        }}
 
