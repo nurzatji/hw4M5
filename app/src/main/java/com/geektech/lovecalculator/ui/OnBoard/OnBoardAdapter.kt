@@ -16,7 +16,7 @@ class OnBoardAdapter(private val onStartClick: () -> Unit) :
         OnBoardModel(
             "Have a good time",
             "You should take the time to help those who need you",
-            R.drawable.little_heart
+            R.drawable.result
         ),
         OnBoardModel(
             "Cherishing love",
@@ -55,7 +55,7 @@ class OnBoardAdapter(private val onStartClick: () -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(onBoard: OnBoardModel) {
             binding.apply {
-                imgBoard.setImageResource(onBoard.image)
+                lottie.setImageResource(onBoard.image)
                 tvTittle.text = onBoard.tittle
                 tvDescription.text = onBoard.desc
             }
